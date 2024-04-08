@@ -32,6 +32,7 @@ the data in the printed output is delimited using one whitespace character.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct node
 {
@@ -44,17 +45,19 @@ void insert_node(struct node** treePtr, int data);
 void inOrder(struct node* treePtr);
 void delete_tree(struct node** treePtr);
 
-int main() {
-	int temp = 0;
+int main(int argc, char* argv[]) {
+	char temp[100] = "";
 	struct node* treePtr = NULL;
     printf("Enter the value of the new data member: ");
-	scanf("%d", &temp);
-    while (temp > 0)
-    {
-        insert_node(&treePtr, temp);
-        printf("Enter the value of the new data member: ");
-        scanf("%d", &temp);            
-    }
+	scanf("%c", &temp);
+	for (int i = 0;i< len(temp);i++)
+	{
+		if(temp[i]==",")
+		{
+			temp[i] = " ";
+		}
+	}
+
     printf("Initial version of binary tree:\n");
     inOrder(treePtr);
     printf("\n");
@@ -99,7 +102,11 @@ void inOrder(struct node* treePtr)
 
 void delete_tree(struct node** treePtr)
 {
-       free(*treePtr);
-	   delete_tree(&((*treePtr)->leftPtr));
-       delete_tree(&((*treePtr)->rightPtr));
+    if ((*treePtr) != NULL)
+	{
+		delete_tree(&((*treePtr)->leftPtr));
+       	delete_tree(&((*treePtr)->rightPtr));
+	   	free(*treePtr);
+		(*treePtr) = NULL;
+	}
 }
